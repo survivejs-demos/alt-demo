@@ -41,7 +41,7 @@ class NoteStore {
     this.setState({notes: this.notes});
   }
   getNotesByIds(ids) {
-    return ids.map(id => this.notes[id]) || [];
+    return ids.map(id => this.notes[id]).filter(a => a) || [];
   }
 }
 
