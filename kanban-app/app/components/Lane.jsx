@@ -24,11 +24,14 @@ const noteTarget = {
 @DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
   connectDropTarget: connect.dropTarget()
 }))
-@connect(({notes}) => ({notes}))
+@connect(({notes}) => ({notes}), {
+  noteActions: NoteActions,
+  laneActions: LaneActions
+})
 export default class Lane extends React.Component {
   render() {
     const {
-      connectDropTarget, lane, notes, ...props
+      connectDropTarget, lane, notes, laneActions, noteActions, ...props
     } = this.props;
 
     return connectDropTarget(
@@ -51,65 +54,74 @@ export default class Lane extends React.Component {
       </div>
     );
   }
-  editNote(id, task) {
+  editNote = (id, task) => {
+    const {noteActions} = this.props;
+
     // Don't modify if trying to set an empty value
     if(!task.trim()) {
-      NoteActions.update({id, editing: false});
+      noteActions.update({id, editing: false});
 
       return;
     }
 
-    NoteActions.update({id, task, editing: false});
+    noteActions.update({id, task, editing: false});
   }
   addNote = (e) => {
     // If note is added, avoid opening lane name edit by stopping
     // event bubbling in this case.
     e.stopPropagation();
 
+    const {laneActions, noteActions} = this.props;
     const laneId = this.props.lane.id;
-    const note = NoteActions.create({task: 'New task'});
+    const note = noteActions.create({task: 'New task'});
 
-    LaneActions.attachToLane({
+    laneActions.attachToLane({
       noteId: note.id,
       laneId
     });
-  };
+  }
   deleteNote = (noteId, e) => {
     // Avoid bubbling to edit
     e.stopPropagation();
 
+    const {laneActions, noteActions} = this.props;
     const laneId = this.props.lane.id;
 
-    LaneActions.detachFromLane({laneId, noteId});
-    NoteActions.delete(noteId);
-  };
+    laneActions.detachFromLane({laneId, noteId});
+    noteActions.delete(noteId);
+  }
   editName = (name) => {
+    const {laneActions} = this.props;
     const laneId = this.props.lane.id;
 
     // Don't modify if trying to set an empty value
     if(!name.trim()) {
-      LaneActions.update({id: laneId, editing: false});
+      laneActions.update({id: laneId, editing: false});
 
       return;
     }
 
-    LaneActions.update({id: laneId, name, editing: false});
-  };
+    laneActions.update({id: laneId, name, editing: false});
+  }
   deleteLane = (e) => {
     // Avoid bubbling to edit
     e.stopPropagation();
 
+    const {laneActions} = this.props;
     const laneId = this.props.lane.id;
 
-    LaneActions.delete(laneId);
-  };
+    laneActions.delete(laneId);
+  }
   activateLaneEdit = () => {
+    const {laneActions} = this.props;
     const laneId = this.props.lane.id;
 
-    LaneActions.update({id: laneId, editing: true});
-  };
-  activateNoteEdit(id) {
-    NoteActions.update({id, editing: true});
+    laneActions.update({id: laneId, editing: true});
+  }
+  activateNoteEdit = (id) => {
+    const {noteActions} = this.props;
+
+    noteActions.update({id, editing: true});
   }
 }
 
