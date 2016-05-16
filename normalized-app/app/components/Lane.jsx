@@ -101,7 +101,10 @@ export default class Lane extends React.Component {
 
     LaneActions.update({id: laneId, name, editing: false});
   };
-  deleteLane = () => {
+  deleteLane = (e) => {
+    // Avoid bubbling to edit
+    e.stopPropagation();
+
     const laneId = this.props.lane.id;
 
     LaneActions.delete(laneId);

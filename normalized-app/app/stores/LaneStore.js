@@ -36,11 +36,9 @@ class LaneStore {
     });
   }
   delete(id) {
-    // XXX: this doesn't feel particularly clean. Better go through
-    // $unset or some such (React immutability helpers).
-    delete this.lanes[id];
+    const {[id]: omit, ...lanes} = this.lanes;
 
-    this.setState({lanes: this.lanes});
+    this.setState({lanes});
   }
   attachToLane({laneId, noteId}) {
     const lanes = this.lanes;

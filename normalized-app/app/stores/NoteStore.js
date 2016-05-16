@@ -34,14 +34,12 @@ class NoteStore {
     });
   }
   delete(id) {
-    // XXX: this doesn't feel particularly clean. Better go through
-    // $unset or some such (React immutability helpers).
-    delete this.notes[id];
+    const {[id]: omit, ...notes} = this.notes;
 
-    this.setState({notes: this.notes});
+    this.setState({notes});
   }
   getNotesByIds(ids) {
-    return ids.map(id => this.notes[id]).filter(a => a) || [];
+    return (ids || []).map(id => this.notes[id]).filter(a => a) || [];
   }
 }
 
