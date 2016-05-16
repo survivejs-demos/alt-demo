@@ -26,7 +26,7 @@ export default class Editable extends React.Component {
     const onDelete = this.props.onDelete;
 
     return (
-      <div onClick={this.props.onValueClick}>
+      <div onClick={this.props.onValueClick || noop}>
         <span className="value">{this.props.value}</span>
         {onDelete ? this.renderDelete() : null }
       </div>
@@ -50,3 +50,5 @@ export default class Editable extends React.Component {
     }
   };
 }
+
+function noop() {}
