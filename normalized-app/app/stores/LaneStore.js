@@ -42,10 +42,21 @@ export default class LaneStore {
   attachToLane({laneId, noteId}) {
     const lanes = this.lanes;
     const lane = lanes[laneId];
+    const laneContainingNote = this.findLaneContainingNote(noteId);
+    let removeNote = {};
 
-    // XXXXX: this should clean up possible old reference to noteId
+    if(laneContainingNote) {
+      // Remove possible old reference
+      removeNote = {
+        [laneContainingNote.id]: Object.assign({}, laneContainingNote, {
+          notes: laneContainingNote.notes.filter(note => note !== noteId)
+        })
+      };
+    }
+
     this.setState({
-      lanes: Object.assign({}, lanes, {
+      lanes: Object.assign({}, lanes, removeNote, {
+        // Add a new reference
         [laneId]: Object.assign({}, lane, {
           notes: lane.notes.includes(noteId) ?
             lane.notes :
@@ -58,6 +69,10 @@ export default class LaneStore {
     const lanes = this.lanes;
     const lane = lanes[laneId];
 
+    if(!lane) {
+      return console.error('detachFromLane - Trying to detach from a non-existent lane');
+    }
+
     this.setState({
       lanes: Object.assign({}, lanes, {
         [laneId]: Object.assign({}, lane, {
@@ -67,10 +82,8 @@ export default class LaneStore {
     });
   }
   move({sourceId, targetId}) {
-    const lanes = this.getInstance().getState();
-
-    const sourceLane = lanes.filter(lane => lane.notes.includes(sourceId))[0];
-    const targetLane = lanes.filter(lane => lane.notes.includes(targetId))[0];
+    const sourceLane = this.findLaneContainingNote(sourceId);
+    const targetLane = this.findLaneContainingNote(targetId);
 
     const sourceNoteIndex = sourceLane.notes.indexOf(sourceId);
     const targetNoteIndex = targetLane.notes.indexOf(targetId);
@@ -95,5 +108,13 @@ export default class LaneStore {
 
     // XXX: not cool since we go through mutation here
     this.setState({lanes: this.lanes});
+  }
+  findLaneContainingNote(id) {
+    const lanes = this.getInstance().getState();
+    const matches = lanes.filter(lane => lane.notes.includes(id));
+
+    if(matches.length) {
+      return matches[0]
+    }
   }
 }
