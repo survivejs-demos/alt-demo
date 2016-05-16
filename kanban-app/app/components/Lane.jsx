@@ -1,11 +1,11 @@
 import React from 'react';
-import connect from 'connect-alt';
-import Notes from './Notes.jsx';
+import {DropTarget} from 'react-dnd';
+import connect from '../libs/connect';
 import NoteActions from '../actions/NoteActions';
 import LaneActions from '../actions/LaneActions';
-import Editable from './Editable.jsx';
-import {DropTarget} from 'react-dnd';
 import ItemTypes from '../constants/itemTypes';
+import Notes from './Notes.jsx';
+import Editable from './Editable.jsx';
 
 const noteTarget = {
   hover(targetProps, monitor) {

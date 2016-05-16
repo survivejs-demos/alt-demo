@@ -1,9 +1,9 @@
 import React from 'react';
-import connect from 'connect-alt';
-import Lanes from './Lanes.jsx';
-import LaneActions from '../actions/LaneActions';
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import connect from '../libs/connect';
+import Lanes from './Lanes.jsx';
+import LaneActions from '../actions/LaneActions';
 
 @DragDropContext(HTML5Backend)
 @connect(({lanes}) => ({lanes}))
