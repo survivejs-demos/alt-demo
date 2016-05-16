@@ -6,15 +6,13 @@ import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 @DragDropContext(HTML5Backend)
-@connect('lanes')
+@connect(({lanes}) => ({lanes: lanes.lanes}))
 export default class App extends React.Component {
   render() {
-    const {lanesStore} = this.props;
-
     return (
       <div>
         <button className="add-lane" onClick={this.addLane}>+</button>
-        <Lanes lanes={lanesStore.lanes} />
+        <Lanes lanes={this.props.lanes} />
       </div>
     );
   }

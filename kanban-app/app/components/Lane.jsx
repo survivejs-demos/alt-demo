@@ -24,12 +24,11 @@ const noteTarget = {
 @DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
   connectDropTarget: connect.dropTarget()
 }))
-@connect('notes')
-@connect('lanes') // Needed to get around pure rendering bug
+@connect(({notes}) => ({notes: notes.notes}))
 export default class Lane extends React.Component {
   render() {
     const {
-      connectDropTarget, lane, flux, notesStore, lanesStore, ...props
+      connectDropTarget, lane, notes, ...props
     } = this.props;
 
     return connectDropTarget(
@@ -45,7 +44,7 @@ export default class Lane extends React.Component {
           </div>
         </div>
         <Notes
-          notes={getNotesByIds(notesStore.notes, lane.notes)}
+          notes={getNotesByIds(notes, lane.notes)}
           onValueClick={this.activateNoteEdit}
           onEdit={this.editNote}
           onDelete={this.deleteNote} />
