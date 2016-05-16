@@ -13,8 +13,6 @@ const noteTarget = {
     const sourceId = sourceProps.id;
 
     if(!targetProps.lane.notes.length) {
-      console.log('attaching', sourceId);
-
       LaneActions.attachToLane({
         laneId: targetProps.lane.id,
         noteId: sourceId
@@ -27,11 +25,12 @@ const noteTarget = {
   connectDropTarget: connect.dropTarget()
 }))
 @connect('notes')
+@connect('lanes') // Needed to get around pure rendering bug
 export default class Lane extends React.Component {
   render() {
-    const {connectDropTarget, lane, flux, notesStore, ...props} = this.props;
-
-    console.log('render', lane.notes);
+    const {
+      connectDropTarget, lane, flux, notesStore, lanesStore, ...props
+    } = this.props;
 
     return connectDropTarget(
       <div {...props}>
