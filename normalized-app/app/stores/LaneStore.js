@@ -2,16 +2,15 @@ import alt from '../libs/alt';
 import LaneActions from '../actions/LaneActions';
 import update from 'react-addons-update';
 
-class LaneStore {
+export default class LaneStore {
   constructor() {
     this.bindActions(LaneActions);
 
     // normalized - {<id>: {lane}}
     this.lanes = {};
-
-    this.exportPublicMethods({
-      getLanes: this.getLanes.bind(this)
-    });
+  }
+  static getState() {
+    return Object.keys(this.state.lanes || {}).map(id => this.state.lanes[id]) || [];
   }
   create({id, notes, editing, name}) {
     this.setState({
@@ -44,6 +43,7 @@ class LaneStore {
     const lanes = this.lanes;
     const lane = lanes[laneId];
 
+    // XXXXX: this should clean up possible old reference to noteId
     this.setState({
       lanes: Object.assign({}, lanes, {
         [laneId]: Object.assign({}, lane, {
@@ -67,7 +67,7 @@ class LaneStore {
     });
   }
   move({sourceId, targetId}) {
-    const lanes = this.getLanes();
+    const lanes = this.getInstance().getState();
 
     const sourceLane = lanes.filter(lane => lane.notes.includes(sourceId))[0];
     const targetLane = lanes.filter(lane => lane.notes.includes(targetId))[0];
@@ -96,9 +96,4 @@ class LaneStore {
     // XXX: not cool since we go through mutation here
     this.setState({lanes: this.lanes});
   }
-  getLanes() {
-    return Object.keys(this.lanes).map(id => this.lanes[id]) || [];
-  }
 }
-
-export default alt.createStore(LaneStore, 'LaneStore');

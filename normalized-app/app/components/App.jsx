@@ -1,30 +1,25 @@
-import AltContainer from 'alt-container';
 import React from 'react';
-import uuid from 'uuid';
-import Lanes from './Lanes.jsx';
-import LaneActions from '../actions/LaneActions';
-import LaneStore from '../stores/LaneStore';
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import uuid from 'uuid';
+import connect from '../libs/connect';
+import Lanes from './Lanes';
+import LaneActions from '../actions/LaneActions';
 
 @DragDropContext(HTML5Backend)
+@connect(({lanes}) => ({lanes}), {
+  laneActions: LaneActions
+})
 export default class App extends React.Component {
   render() {
     return (
       <div>
         <button className="add-lane" onClick={this.addLane}>+</button>
-        <AltContainer
-          stores={[LaneStore]}
-          inject={{
-            lanes: () => LaneStore.getLanes()
-          }}
-        >
-          <Lanes />
-        </AltContainer>
+        <Lanes lanes={this.props.lanes} />
       </div>
     );
   }
-  addLane() {
-    LaneActions.create({id: uuid.v4(), name: 'New lane'});
+  addLane = () => {
+    this.props.laneActions.create({id: uuid.v4(), name: 'New lane'});
   }
 }

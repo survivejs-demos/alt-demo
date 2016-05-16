@@ -1,16 +1,15 @@
 import alt from '../libs/alt';
 import NoteActions from '../actions/NoteActions';
 
-class NoteStore {
+export default class NoteStore {
   constructor() {
     this.bindActions(NoteActions);
 
     // normalized - {<id>: {note}}
     this.notes = {};
-
-    this.exportPublicMethods({
-      getNotesByIds: this.getNotesByIds.bind(this)
-    });
+  }
+  static getState() {
+    return Object.keys(this.state.notes || {}).map(id => this.state.notes[id]) || [];
   }
   create({id, task, editing}) {
     this.setState({
@@ -38,9 +37,4 @@ class NoteStore {
 
     this.setState({notes});
   }
-  getNotesByIds(ids) {
-    return (ids || []).map(id => this.notes[id]).filter(a => a) || [];
-  }
 }
-
-export default alt.createStore(NoteStore, 'NoteStore');

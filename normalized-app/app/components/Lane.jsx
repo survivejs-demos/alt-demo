@@ -1,13 +1,12 @@
-import AltContainer from 'alt-container';
 import React from 'react';
-import uuid from 'uuid';
-import Notes from './Notes.jsx';
-import NoteActions from '../actions/NoteActions';
-import NoteStore from '../stores/NoteStore';
-import LaneActions from '../actions/LaneActions';
-import Editable from './Editable.jsx';
 import {DropTarget} from 'react-dnd';
+import uuid from 'uuid';
+import connect from '../libs/connect';
+import NoteActions from '../actions/NoteActions';
+import LaneActions from '../actions/LaneActions';
 import ItemTypes from '../constants/itemTypes';
+import Notes from './Notes';
+import Editable from './Editable';
 
 const noteTarget = {
   hover(targetProps, monitor) {
@@ -26,9 +25,15 @@ const noteTarget = {
 @DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
   connectDropTarget: connect.dropTarget()
 }))
+@connect(({notes}) => ({notes}), {
+  noteActions: NoteActions,
+  laneActions: LaneActions
+})
 export default class Lane extends React.Component {
   render() {
-    const {connectDropTarget, lane, ...props} = this.props;
+    const {
+      connectDropTarget, lane, notes, laneActions, noteActions, ...props
+    } = this.props;
 
     return connectDropTarget(
       <div {...props}>
@@ -42,79 +47,98 @@ export default class Lane extends React.Component {
             <button onClick={this.deleteLane}>x</button>
           </div>
         </div>
-        <AltContainer
-          stores={[NoteStore]}
-          inject={{
-            notes: () => NoteStore.getNotesByIds(lane.notes)
-          }}
-        >
-          <Notes
-            onValueClick={this.activateNoteEdit}
-            onEdit={this.editNote}
-            onDelete={this.deleteNote} />
-        </AltContainer>
+        <Notes
+          notes={getNotesByIds(notes, lane.notes)}
+          onValueClick={this.activateNoteEdit}
+          onEdit={this.editNote}
+          onDelete={this.deleteNote} />
       </div>
     );
   }
-  editNote(id, task) {
+  editNote = (id, task) => {
+    const {noteActions} = this.props;
+
     // Don't modify if trying to set an empty value
     if(!task.trim()) {
-      NoteActions.update({id, editing: false});
+      noteActions.update({id, editing: false});
 
       return;
     }
 
-    NoteActions.update({id, task, editing: false});
+    noteActions.update({id, task, editing: false});
   }
   addNote = (e) => {
     // If note is added, avoid opening lane name edit by stopping
     // event bubbling in this case.
     e.stopPropagation();
 
-    const laneId = this.props.lane.id;
+    const {laneActions, noteActions} = this.props;
     const noteId = uuid.v4();
-    const note = NoteActions.create({
+    const laneId = this.props.lane.id;
+    const note = noteActions.create({
       id: noteId,
       task: 'New task'
     });
 
-    LaneActions.attachToLane({noteId, laneId});
-  };
+    laneActions.attachToLane({
+      noteId: noteId,
+      laneId
+    });
+  }
   deleteNote = (noteId, e) => {
     // Avoid bubbling to edit
     e.stopPropagation();
 
+    const {laneActions, noteActions} = this.props;
     const laneId = this.props.lane.id;
 
-    LaneActions.detachFromLane({laneId, noteId});
-    NoteActions.delete(noteId);
-  };
+    laneActions.detachFromLane({laneId, noteId});
+    noteActions.delete(noteId);
+  }
   editName = (name) => {
+    const {laneActions} = this.props;
     const laneId = this.props.lane.id;
 
     // Don't modify if trying to set an empty value
     if(!name.trim()) {
-      LaneActions.update({id: laneId, editing: false});
+      laneActions.update({id: laneId, editing: false});
 
       return;
     }
 
-    LaneActions.update({id: laneId, name, editing: false});
-  };
+    laneActions.update({id: laneId, name, editing: false});
+  }
   deleteLane = (e) => {
     // Avoid bubbling to edit
     e.stopPropagation();
 
+    const {laneActions} = this.props;
     const laneId = this.props.lane.id;
 
-    LaneActions.delete(laneId);
-  };
-  activateLaneEdit = () => {
-    const laneId = this.props.lane.id;
-
-    LaneActions.update({id: laneId, editing: true});
-  };
-  activateNoteEdit(id) {
-    NoteActions.update({id, editing: true});
+    laneActions.delete(laneId);
   }
+  activateLaneEdit = () => {
+    const {laneActions} = this.props;
+    const laneId = this.props.lane.id;
+
+    laneActions.update({id: laneId, editing: true});
+  }
+  activateNoteEdit = (id) => {
+    const {noteActions} = this.props;
+
+    noteActions.update({id, editing: true});
+  }
+}
+
+function getNotesByIds(allNotes, ids) {
+  // `reduce` is a powerful method that allows us to
+  // fold data. You can implement `filter` and `map`
+  // through it. Here we are using it to concatenate
+  // notes matching to the ids.
+  return (ids || []).reduce((notes, id) =>
+    // Concatenate possible matching ids to the result
+    notes.concat(
+      allNotes.filter(note => note.id === id)
+    )
+  , []);
 }
