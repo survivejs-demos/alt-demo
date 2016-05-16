@@ -10,7 +10,9 @@ const connectAdapter = (Component, state, actions) => {
 };
 
 export default (state, actions) => {
-  if(state) {
+  if(typeof state === 'function' ||
+    (typeof state === 'object') && Object.keys(state).length) {
+
     return target => connect(state)(connectAdapter(target, state, actions));
   }
 

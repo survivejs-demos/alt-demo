@@ -4,7 +4,7 @@ import Editable from './Editable.jsx';
 import Note from './Note.jsx';
 import LaneActions from '../actions/LaneActions';
 
-export default connect(null, {laneActions: LaneActions})(
+export default connect(({}), {laneActions: LaneActions})(
   ({notes, onValueClick, onEdit, onDelete, laneActions}) => {
     return (
       <ul className="notes">{notes.map(note =>
