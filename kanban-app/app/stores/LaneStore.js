@@ -8,6 +8,9 @@ export default class LaneStore {
 
     this.lanes = [];
   }
+  static getState() {
+    return this.state.lanes;
+  }
   create(lane) {
     const lanes = this.lanes;
 

@@ -6,7 +6,7 @@ import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 @DragDropContext(HTML5Backend)
-@connect(({lanes}) => ({lanes: lanes.lanes}))
+@connect(({lanes}) => ({lanes}))
 export default class App extends React.Component {
   render() {
     return (

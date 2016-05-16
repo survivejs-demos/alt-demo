@@ -24,7 +24,7 @@ const noteTarget = {
 @DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
   connectDropTarget: connect.dropTarget()
 }))
-@connect(({notes}) => ({notes: notes.notes}))
+@connect(({notes}) => ({notes}))
 export default class Lane extends React.Component {
   render() {
     const {

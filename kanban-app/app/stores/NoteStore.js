@@ -7,6 +7,9 @@ export default class NoteStore {
 
     this.notes = [];
   }
+  static getState() {
+    return this.state.notes;
+  }
   create(note) {
     const notes = this.notes;
 
