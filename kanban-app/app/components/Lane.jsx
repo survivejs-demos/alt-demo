@@ -1,8 +1,7 @@
-import AltContainer from 'alt-container';
 import React from 'react';
+import connect from 'connect-alt';
 import Notes from './Notes.jsx';
 import NoteActions from '../actions/NoteActions';
-import NoteStore from '../stores/NoteStore';
 import LaneActions from '../actions/LaneActions';
 import Editable from './Editable.jsx';
 import {DropTarget} from 'react-dnd';
@@ -14,6 +13,8 @@ const noteTarget = {
     const sourceId = sourceProps.id;
 
     if(!targetProps.lane.notes.length) {
+      console.log('attaching', sourceId);
+
       LaneActions.attachToLane({
         laneId: targetProps.lane.id,
         noteId: sourceId
@@ -25,9 +26,12 @@ const noteTarget = {
 @DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
   connectDropTarget: connect.dropTarget()
 }))
+@connect('notes')
 export default class Lane extends React.Component {
   render() {
-    const {connectDropTarget, lane, ...props} = this.props;
+    const {connectDropTarget, lane, flux, notesStore, ...props} = this.props;
+
+    console.log('render', lane.notes);
 
     return connectDropTarget(
       <div {...props}>
@@ -41,17 +45,11 @@ export default class Lane extends React.Component {
             <button onClick={this.deleteLane}>x</button>
           </div>
         </div>
-        <AltContainer
-          stores={[NoteStore]}
-          inject={{
-            notes: () => NoteStore.getNotesByIds(lane.notes)
-          }}
-        >
-          <Notes
-            onValueClick={this.activateNoteEdit}
-            onEdit={this.editNote}
-            onDelete={this.deleteNote} />
-        </AltContainer>
+        <Notes
+          notes={getNotesByIds(notesStore.notes, lane.notes)}
+          onValueClick={this.activateNoteEdit}
+          onEdit={this.editNote}
+          onDelete={this.deleteNote} />
       </div>
     );
   }
@@ -115,4 +113,17 @@ export default class Lane extends React.Component {
   activateNoteEdit(id) {
     NoteActions.update({id, editing: true});
   }
+}
+
+function getNotesByIds(allNotes, ids) {
+  // `reduce` is a powerful method that allows us to
+  // fold data. You can implement `filter` and `map`
+  // through it. Here we are using it to concatenate
+  // notes matching to the ids.
+  return (ids || []).reduce((notes, id) =>
+    // Concatenate possible matching ids to the result
+    notes.concat(
+      allNotes.filter(note => note.id === id)
+    )
+  , []);
 }

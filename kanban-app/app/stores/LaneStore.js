@@ -1,9 +1,8 @@
 import uuid from 'uuid';
-import alt from '../libs/alt';
 import LaneActions from '../actions/LaneActions';
 import update from 'react-addons-update';
 
-class LaneStore {
+export default class LaneStore {
   constructor() {
     this.bindActions(LaneActions);
 
@@ -23,15 +22,15 @@ class LaneStore {
     });
   }
   update(updatedLane) {
-    const lanes = this.lanes.map(lane => {
-      if(lane.id === updatedLane.id) {
-        return Object.assign({}, lane, updatedLane);
-      }
+    this.setState({
+      lanes: this.lanes.map(lane => {
+        if(lane.id === updatedLane.id) {
+          return Object.assign({}, lane, updatedLane);
+        }
 
-      return lane;
+        return lane;
+      })
     });
-
-    this.setState({lanes});
   }
   delete(id) {
     this.setState({
@@ -39,30 +38,30 @@ class LaneStore {
     });
   }
   attachToLane({laneId, noteId}) {
-    const lanes = this.lanes.map(lane => {
-      if(lane.notes.includes(noteId)) {
-        lane.notes = lane.notes.filter(note => note !== noteId);
-      }
+    this.setState({
+      lanes: this.lanes.map(lane => {
+        if(lane.notes.includes(noteId)) {
+          lane.notes = lane.notes.filter(note => note !== noteId);
+        }
 
-      if(lane.id === laneId) {
-        lane.notes.push(noteId);
-      }
+        if(lane.id === laneId) {
+          lane.notes = lane.notes.concat([noteId]);
+        }
 
-      return lane;
+        return lane;
+      })
     });
-
-    this.setState({lanes});
   }
   detachFromLane({laneId, noteId}) {
-    const lanes = this.lanes.map(lane => {
-      if(lane.id === laneId) {
-        lane.notes = lane.notes.filter(note => note !== noteId);
-      }
+    this.setState({
+      lanes: this.lanes.map(lane => {
+        if(lane.id === laneId) {
+          lane.notes = lane.notes.filter(note => note !== noteId);
+        }
 
-      return lane;
+        return lane;
+      })
     });
-
-    this.setState({lanes});
   }
   move({sourceId, targetId}) {
     const lanes = this.lanes;
@@ -91,5 +90,3 @@ class LaneStore {
     this.setState({lanes});
   }
 }
-
-export default alt.createStore(LaneStore, 'LaneStore');
