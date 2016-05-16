@@ -2,7 +2,7 @@ import React from 'react';
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import connect from '../libs/connect';
-import Lanes from './Lanes.jsx';
+import Lanes from './Lanes';
 import LaneActions from '../actions/LaneActions';
 
 @DragDropContext(HTML5Backend)

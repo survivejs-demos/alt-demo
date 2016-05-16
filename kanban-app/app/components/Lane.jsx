@@ -4,8 +4,8 @@ import connect from '../libs/connect';
 import NoteActions from '../actions/NoteActions';
 import LaneActions from '../actions/LaneActions';
 import ItemTypes from '../constants/itemTypes';
-import Notes from './Notes.jsx';
-import Editable from './Editable.jsx';
+import Notes from './Notes';
+import Editable from './Editable';
 
 const noteTarget = {
   hover(targetProps, monitor) {

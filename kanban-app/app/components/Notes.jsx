@@ -1,7 +1,7 @@
 import React from 'react';
 import connect from '../libs/connect';
-import Editable from './Editable.jsx';
-import Note from './Note.jsx';
+import Editable from './Editable';
+import Note from './Note';
 import LaneActions from '../actions/LaneActions';
 
 export default connect(({}), {laneActions: LaneActions})(
