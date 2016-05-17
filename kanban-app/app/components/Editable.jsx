@@ -21,26 +21,26 @@ export default class Editable extends React.Component {
       defaultValue={this.props.value}
       onBlur={this.finishEdit}
       onKeyPress={this.checkEnter} />;
-  };
+  }
   renderValue = () => {
     return (
       <div onClick={this.props.onValueClick || noop}>
         <span className="value">{this.props.value}</span>
       </div>
     );
-  };
+  }
   checkEnter = (e) => {
     if(e.key === 'Enter') {
       this.finishEdit(e);
     }
-  };
+  }
   finishEdit = (e) => {
     const value = e.target.value;
 
     if(this.props.onEdit) {
       this.props.onEdit(value);
     }
-  };
+  }
 }
 
 function noop() {}
