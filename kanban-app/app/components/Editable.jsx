@@ -23,19 +23,11 @@ export default class Editable extends React.Component {
       onKeyPress={this.checkEnter} />;
   };
   renderValue = () => {
-    const onDelete = this.props.onDelete;
-
     return (
       <div onClick={this.props.onValueClick || noop}>
         <span className="value">{this.props.value}</span>
-        {onDelete ? this.renderDelete() : null }
       </div>
     );
-  };
-  renderDelete = () => {
-    return <button
-      className="delete"
-      onClick={this.props.onDelete}>x</button>;
   };
   checkEnter = (e) => {
     if(e.key === 'Enter') {

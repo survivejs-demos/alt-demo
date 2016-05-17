@@ -76,6 +76,8 @@ body {
 }
 
 .note {
+  overflow: auto;
+
   margin-bottom: 0.5em;
   padding: 0.5em;
 
@@ -93,6 +95,9 @@ body {
   display: inline-block;
 }
 
+.note .editable {
+  float: left;
+}
 .note .delete {
   float: right;
 
