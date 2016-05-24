@@ -15,6 +15,14 @@ export default class Editable extends React.Component {
   }
 }
 
+const Value = ({onValueClick = () => {}, value}) => {
+  return (
+    <div onClick={onValueClick}>
+      <span className="value">{value}</span>
+    </div>
+  );
+};
+
 class Edit extends React.Component {
   render() {
     const {value} = this.props;
@@ -43,11 +51,3 @@ class Edit extends React.Component {
     }
   }
 }
-
-const Value = ({onValueClick = () => {}, value}) => {
-  return (
-    <div onClick={onValueClick}>
-      <span className="value">{value}</span>
-    </div>
-  );
-};
