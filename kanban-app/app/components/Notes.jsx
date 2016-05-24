@@ -5,9 +5,11 @@ import Note from './Note';
 import LaneActions from '../actions/LaneActions';
 
 export default connect(({}), {laneActions: LaneActions})(
-  ({notes,
+  ({
+    notes,
     onValueClick=() => {}, onEdit=() => {}, onDelete=() => {},
-    laneActions}) => {
+    laneActions
+  }) => {
     return (
       <ul className="notes">{notes.map(note =>
         <Note className="note" id={note.id} key={note.id}
