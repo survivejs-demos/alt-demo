@@ -1,19 +1,13 @@
 import React from 'react';
 
-export default class Editable extends React.Component {
-  render() {
-    const {value, onEdit, onValueClick, editing, ...props} = this.props;
-
-    return (
-      <div {...props}>
-        {editing ?
-          <Edit value={value} onEdit={onEdit} /> :
-          <Value value={value} onValueClick={onValueClick} />
-        }
-      </div>
-    );
-  }
-}
+export default ({editing, value, onEdit, onValueClick, ...props}) => (
+  <div {...props}>
+    {editing ?
+      <Edit value={value} onEdit={onEdit} /> :
+      <Value value={value} onValueClick={onValueClick} />
+    }
+  </div>
+)
 
 const Value = ({onValueClick = () => {}, value}) => {
   return (
