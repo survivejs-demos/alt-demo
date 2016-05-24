@@ -38,9 +38,9 @@ export default class Note extends React.Component {
     const dragSource = editing ? a => a : connectDragSource;
 
     return dragSource(connectDropTarget(
-      <li style={{
+      <div style={{
         opacity: isDragging || isOver ? 0 : 1
-      }} {...props}>{props.children}</li>
+      }} {...props}>{props.children}</div>
     ));
   }
 }
