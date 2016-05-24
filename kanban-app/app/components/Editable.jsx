@@ -6,28 +6,29 @@ export default class Editable extends React.Component {
 
     return (
       <div {...props}>
-        {editing ? this.renderEdit() : this.renderValue()}
+        {editing ?
+          <Edit value={value} onEdit={onEdit} /> :
+          <Value value={value} onValueClick={onValueClick} />
+        }
       </div>
     );
   }
-  renderEdit = () => {
+}
+
+class Edit extends React.Component {
+  render() {
+    const {value} = this.props;
+
     return <input type="text"
       ref={
         element => element ?
-        element.selectionStart = this.props.value.length :
+        element.selectionStart = value.length :
         null
       }
       autoFocus={true}
-      defaultValue={this.props.value}
+      defaultValue={value}
       onBlur={this.finishEdit}
       onKeyPress={this.checkEnter} />;
-  }
-  renderValue = () => {
-    return (
-      <div onClick={this.props.onValueClick || noop}>
-        <span className="value">{this.props.value}</span>
-      </div>
-    );
   }
   checkEnter = (e) => {
     if(e.key === 'Enter') {
@@ -43,4 +44,10 @@ export default class Editable extends React.Component {
   }
 }
 
-function noop() {}
+const Value = ({onValueClick = () => {}, value}) => {
+  return (
+    <div onClick={onValueClick}>
+      <span className="value">{value}</span>
+    </div>
+  );
+};
