@@ -9,13 +9,8 @@ export default ({editing, value, onEdit, onValueClick, ...props}) => (
   </div>
 )
 
-const Value = ({onValueClick = () => {}, value}) => {
-  return (
-    <div onClick={onValueClick}>
-      <span className="value">{value}</span>
-    </div>
-  );
-};
+const Value = ({onValueClick = () => {}, value}) =>
+  <span className="value" onClick={onValueClick}>{value}</span>
 
 class Edit extends React.Component {
   render() {
