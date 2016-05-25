@@ -21,7 +21,7 @@ class Edit extends React.Component {
   render() {
     const {value} = this.props;
 
-    return <input type="text"
+    return <input type="text" className="edit"
       ref={
         element => element ?
         element.selectionStart = value.length :
