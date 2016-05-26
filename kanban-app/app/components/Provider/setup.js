@@ -4,8 +4,8 @@ import NoteStore from '../../stores/NoteStore';
 import LaneStore from '../../stores/LaneStore';
 
 export default alt => {
-  alt.addStore('notes', NoteStore);
-  alt.addStore('lanes', LaneStore);
+  alt.addStore('NoteStore', NoteStore);
+  alt.addStore('LaneStore', LaneStore);
 
   persist(alt, storage, 'app');
 }

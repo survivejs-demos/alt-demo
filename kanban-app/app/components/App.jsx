@@ -7,7 +7,7 @@ import Lanes from './Lanes';
 import LaneActions from '../actions/LaneActions';
 
 @DragDropContext(HTML5Backend)
-@connect(({lanes}) => ({lanes}), {
+@connect(({LaneStore}) => ({lanes: LaneStore.lanes}), {
   laneActions: LaneActions
 })
 export default class App extends React.Component {

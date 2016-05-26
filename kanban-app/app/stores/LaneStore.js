@@ -3,16 +3,9 @@ import update from 'react-addons-update';
 
 export default class LaneStore {
   constructor() {
-    this.on('bootstrap', lanes => {
-      this.lanes = Object.keys(lanes).map(k => lanes[k]);
-    });
-
     this.bindActions(LaneActions);
 
     this.lanes = [];
-  }
-  static getState() {
-    return this.state.lanes;
   }
   create(lane) {
     // If `notes` aren't provided for some reason,

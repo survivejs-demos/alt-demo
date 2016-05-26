@@ -25,7 +25,7 @@ const noteTarget = {
 @DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
   connectDropTarget: connect.dropTarget()
 }))
-@connect(({notes}) => ({notes}), {
+@connect(({NoteStore}) => ({notes: NoteStore.notes}), {
   noteActions: NoteActions,
   laneActions: LaneActions
 })
