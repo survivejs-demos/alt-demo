@@ -7,5 +7,5 @@ export default alt => {
   alt.addStore('NoteStore', NoteStore);
   alt.addStore('LaneStore', LaneStore);
 
-  persist(alt, storage, 'app');
+  persist(alt, storage(localStorage), 'app');
 }

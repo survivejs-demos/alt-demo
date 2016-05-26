@@ -1,13 +1,13 @@
-export default {
+export default storage => ({
   get(k) {
     try {
-      return JSON.parse(localStorage.getItem(k));
+      return JSON.parse(storage.getItem(k));
     }
     catch(e) {
       return null;
     }
   },
   set(k, v) {
-    localStorage.setItem(k, JSON.stringify(v));
+    storage.setItem(k, JSON.stringify(v));
   }
-}
+})
