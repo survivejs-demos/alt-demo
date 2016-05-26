@@ -10,9 +10,7 @@ export default class NoteStore {
     return this.state.notes;
   }
   create(note) {
-    this.setState({
-      notes: this.notes.concat(note)
-    });
+    this.setState({notes: this.notes.concat(note)});
   }
   update(updatedNote) {
     const notes = this.notes.map(note => {
@@ -26,8 +24,6 @@ export default class NoteStore {
     this.setState({notes});
   }
   delete(id) {
-    this.setState({
-      notes: this.notes.filter(note => note.id !== id)
-    });
+    this.setState({notes: this.notes.filter(note => note.id !== id)});
   }
 }
