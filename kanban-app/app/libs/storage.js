@@ -10,4 +10,4 @@ export default {
   set(k, v) {
     localStorage.setItem(k, JSON.stringify(v));
   }
-};
+}
