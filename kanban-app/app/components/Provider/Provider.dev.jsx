@@ -4,9 +4,9 @@ import chromeDebug from 'alt-utils/lib/chromeDebug';
 import alt from '../../libs/alt';
 import setup from './setup';
 
-chromeDebug(alt);
-
 setup(alt);
+
+chromeDebug(alt);
 
 React.Perf = require('react-addons-perf');
 
