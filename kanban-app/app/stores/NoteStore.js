@@ -1,4 +1,3 @@
-import uuid from 'uuid';
 import NoteActions from '../actions/NoteActions';
 
 export default class NoteStore {
@@ -11,15 +10,9 @@ export default class NoteStore {
     return this.state.notes;
   }
   create(note) {
-    const notes = this.notes;
-
-    note.id = uuid.v4();
-
     this.setState({
-      notes: notes.concat(note)
+      notes: this.notes.concat(note)
     });
-
-    return note;
   }
   update(updatedNote) {
     const notes = this.notes.map(note => {

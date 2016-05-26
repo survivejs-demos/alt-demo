@@ -1,4 +1,5 @@
 import React from 'react';
+import uuid from 'uuid';
 import {DropTarget} from 'react-dnd';
 import connect from '../libs/connect';
 import NoteActions from '../actions/NoteActions';
@@ -72,13 +73,14 @@ export default class Lane extends React.Component {
     e.stopPropagation();
 
     const {laneActions, noteActions} = this.props;
+    const noteId = uuid.v4();
     const laneId = this.props.lane.id;
-    const note = noteActions.create({task: 'New task'});
 
-    laneActions.attachToLane({
-      noteId: note.id,
-      laneId
+    noteActions.create({
+      id: noteId,
+      task: 'New task'
     });
+    laneActions.attachToLane({laneId, noteId});
   }
   deleteNote = (noteId, e) => {
     // Avoid bubbling to edit

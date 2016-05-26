@@ -1,4 +1,5 @@
 import React from 'react';
+import uuid from 'uuid';
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import connect from '../libs/connect';
@@ -19,6 +20,6 @@ export default class App extends React.Component {
     );
   }
   addLane = () => {
-    this.props.laneActions.create({name: 'New lane'});
+    this.props.laneActions.create({id: uuid.v4(), name: 'New lane'});
   }
 }

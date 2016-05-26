@@ -1,4 +1,3 @@
-import uuid from 'uuid';
 import LaneActions from '../actions/LaneActions';
 import update from 'react-addons-update';
 
@@ -12,16 +11,12 @@ export default class LaneStore {
     return this.state.lanes;
   }
   create(lane) {
-    const lanes = this.lanes;
-
-    lane.id = uuid.v4();
-
     // If `notes` aren't provided for some reason,
     // default to an empty array.
     lane.notes = lane.notes || [];
 
     this.setState({
-      lanes: lanes.concat(lane)
+      lanes: this.lanes.concat(lane)
     });
   }
   update(updatedLane) {
