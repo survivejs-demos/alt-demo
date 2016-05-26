@@ -6,6 +6,20 @@ export default class LaneStore {
   constructor() {
     this.bindActions(LaneActions);
 
+    this.on('bootstrap', lanes => {
+      this.lanes = {};
+
+      Object.keys(lanes).forEach(k => {
+        if(k === 'lanes') {
+          return;
+        }
+
+        const lane = lanes[k];
+
+        this.lanes[lane.id] = Object.assign({}, lane);
+      });
+    });
+
     // normalized - {<id>: {lane}}
     this.lanes = {};
   }

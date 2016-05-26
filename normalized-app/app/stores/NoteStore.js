@@ -5,6 +5,20 @@ export default class NoteStore {
   constructor() {
     this.bindActions(NoteActions);
 
+    this.on('bootstrap', notes => {
+      this.notes = {};
+
+      Object.keys(notes).forEach(k => {
+        if(k === 'notes') {
+          return;
+        }
+
+        const note = notes[k];
+
+        this.notes[note.id] = Object.assign({}, note);
+      });
+    });
+
     // normalized - {<id>: {note}}
     this.notes = {};
   }
