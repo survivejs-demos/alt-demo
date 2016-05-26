@@ -26,13 +26,13 @@ const noteTarget = {
   connectDropTarget: connect.dropTarget()
 }))
 @connect(({notes}) => ({notes}), {
-  noteActions: NoteActions,
-  laneActions: LaneActions
+  NoteActions,
+  LaneActions
 })
 export default class Lane extends React.Component {
   render() {
     const {
-      connectDropTarget, lane, notes, laneActions, noteActions, ...props
+      connectDropTarget, lane, notes, LaneActions, NoteActions, ...props
     } = this.props;
 
     return connectDropTarget(
@@ -72,58 +72,58 @@ export default class Lane extends React.Component {
     // event bubbling in this case.
     e.stopPropagation();
 
-    const {laneActions, noteActions} = this.props;
+    const {LaneActions, NoteActions} = this.props;
     const noteId = uuid.v4();
     const laneId = this.props.lane.id;
 
-    noteActions.create({
+    NoteActions.create({
       id: noteId,
       task: 'New task'
     });
-    laneActions.attachToLane({laneId, noteId});
+    LaneActions.attachToLane({laneId, noteId});
   }
   deleteNote = (noteId, e) => {
     // Avoid bubbling to edit
     e.stopPropagation();
 
-    const {laneActions, noteActions} = this.props;
+    const {LaneActions, NoteActions} = this.props;
     const laneId = this.props.lane.id;
 
-    laneActions.detachFromLane({laneId, noteId});
-    noteActions.delete(noteId);
+    LaneActions.detachFromLane({laneId, noteId});
+    NoteActions.delete(noteId);
   }
   editName = (name) => {
-    const {laneActions} = this.props;
+    const {LaneActions} = this.props;
     const laneId = this.props.lane.id;
 
     // Don't modify if trying to set an empty value
     if(!name.trim()) {
-      laneActions.update({id: laneId, editing: false});
+      LaneActions.update({id: laneId, editing: false});
 
       return;
     }
 
-    laneActions.update({id: laneId, name, editing: false});
+    LaneActions.update({id: laneId, name, editing: false});
   }
   deleteLane = (e) => {
     // Avoid bubbling to edit
     e.stopPropagation();
 
-    const {laneActions} = this.props;
+    const {LaneActions} = this.props;
     const laneId = this.props.lane.id;
 
-    laneActions.delete(laneId);
+    LaneActions.delete(laneId);
   }
   activateLaneEdit = () => {
-    const {laneActions} = this.props;
+    const {LaneActions} = this.props;
     const laneId = this.props.lane.id;
 
-    laneActions.update({id: laneId, editing: true});
+    LaneActions.update({id: laneId, editing: true});
   }
   activateNoteEdit = (id) => {
-    const {noteActions} = this.props;
+    const {NoteActions} = this.props;
 
-    noteActions.update({id, editing: true});
+    NoteActions.update({id, editing: true});
   }
 }
 

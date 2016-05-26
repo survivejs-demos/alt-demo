@@ -8,7 +8,7 @@ import LaneActions from '../actions/LaneActions';
 
 @DragDropContext(HTML5Backend)
 @connect(({LaneStore}) => ({lanes: LaneStore.lanes}), {
-  laneActions: LaneActions
+  LaneActions
 })
 export default class App extends React.Component {
   render() {
@@ -20,6 +20,6 @@ export default class App extends React.Component {
     );
   }
   addLane = () => {
-    this.props.laneActions.create({id: uuid.v4(), name: 'New lane'});
+    this.props.LaneActions.create({id: uuid.v4(), name: 'New lane'});
   }
 }
