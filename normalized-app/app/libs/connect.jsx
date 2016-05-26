@@ -2,11 +2,7 @@ import React from 'react';
 import connect from 'connect-alt';
 
 const connectAdapter = (Component, state, actions) => {
-  return class ConnectAdapter extends React.Component {
-    render() {
-      return <Component {...Object.assign({}, this.props, actions)} {...this.state} />;
-    }
-  };
+  return props => <Component {...Object.assign({}, props, actions)} />
 };
 
 export default (state, actions) => {
