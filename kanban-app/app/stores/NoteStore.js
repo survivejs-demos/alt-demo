@@ -2,6 +2,10 @@ import NoteActions from '../actions/NoteActions';
 
 export default class NoteStore {
   constructor() {
+    this.on('bootstrap', notes => {
+      this.notes = Object.keys(notes).map(k => notes[k]);
+    });
+
     this.bindActions(NoteActions);
 
     this.notes = [];
