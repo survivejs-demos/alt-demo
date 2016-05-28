@@ -25,7 +25,7 @@ const App = ({LaneActions, lanes}) => {
 
 export default compose(
   DragDropContext(HTML5Backend),
-  connect(({LaneStore}) => (
+  connect(({LaneStore}) => ({
     lanes: LaneStore.lanes
   }), {
     LaneActions
