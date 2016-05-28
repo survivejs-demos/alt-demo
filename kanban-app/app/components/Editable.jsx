@@ -1,18 +1,25 @@
 import React from 'react';
+import classnames from 'classnames';
 
-export default ({editing, value, onEdit}) => {
+export default ({editing, value, onEdit, className, ...props}) => {
   if(editing) {
-    return <Edit value={value} onEdit={onEdit} />;
+    return <Edit
+      className={className}
+      value={value}
+      onEdit={onEdit}
+      {...props} />;
   }
 
-  return <span className="value">{value}</span>;
+  return <span className={classnames('value', className)}>{value}</span>;
 }
 
 class Edit extends React.Component {
   render() {
-    const {value} = this.props;
+    const {className, value, ...props} = this.props;
 
-    return <input type="text" className="edit"
+    return <input
+      type="text"
+      className={classnames('edit', className)}
       ref={
         element => element ?
         element.selectionStart = value.length :
