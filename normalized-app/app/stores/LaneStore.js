@@ -1,6 +1,5 @@
-import alt from '../libs/alt';
-import LaneActions from '../actions/LaneActions';
 import update from 'react-addons-update';
+import LaneActions from '../actions/LaneActions';
 
 export default class LaneStore {
   constructor() {
