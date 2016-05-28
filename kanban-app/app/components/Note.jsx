@@ -3,6 +3,20 @@ import {compose} from 'redux';
 import {DragSource, DropTarget} from 'react-dnd';
 import ItemTypes from '../constants/itemTypes';
 
+const Note = ({
+  connectDragSource, connectDropTarget, isDragging,
+  isOver, onMove, id, editing, ...props
+}) => {
+  // Pass through if we are editing
+  const dragSource = editing ? a => a : connectDragSource;
+
+  return dragSource(connectDropTarget(
+    <div style={{
+      opacity: isDragging || isOver ? 0 : 1
+    }} {...props}>{props.children}</div>
+  ));
+};
+
 const noteSource = {
   beginDrag(props) {
     return {
@@ -22,20 +36,6 @@ const noteTarget = {
     }
   }
 };
-
-const Note = ({
-  connectDragSource, connectDropTarget, isDragging,
-  isOver, onMove, id, editing, ...props
-}) => {
-  // Pass through if we are editing
-  const dragSource = editing ? a => a : connectDragSource;
-
-  return dragSource(connectDropTarget(
-    <div style={{
-      opacity: isDragging || isOver ? 0 : 1
-    }} {...props}>{props.children}</div>
-  ));
-}
 
 export default compose(
   DragSource(ItemTypes.NOTE, noteSource, (connect, monitor) => ({

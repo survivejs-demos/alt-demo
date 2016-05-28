@@ -9,20 +9,6 @@ import ItemTypes from '../constants/itemTypes';
 import Notes from './Notes';
 import Editable from './Editable';
 
-const noteTarget = {
-  hover(targetProps, monitor) {
-    const sourceProps = monitor.getItem();
-    const sourceId = sourceProps.id;
-
-    if(!targetProps.lane.notes.length) {
-      LaneActions.attachToLane({
-        laneId: targetProps.lane.id,
-        noteId: sourceId
-      });
-    }
-  }
-};
-
 const Lane = ({
   connectDropTarget, lane, notes, LaneActions, NoteActions, ...props
 }) => {
@@ -97,7 +83,7 @@ const Lane = ({
         onDelete={deleteNote} />
     </div>
   );
-}
+};
 
 function selectNotesByIds(allNotes, noteIds = []) {
   // `reduce` is a powerful method that allows us to
@@ -111,6 +97,20 @@ function selectNotesByIds(allNotes, noteIds = []) {
     )
   , []);
 }
+
+const noteTarget = {
+  hover(targetProps, monitor) {
+    const sourceProps = monitor.getItem();
+    const sourceId = sourceProps.id;
+
+    if(!targetProps.lane.notes.length) {
+      LaneActions.attachToLane({
+        laneId: targetProps.lane.id,
+        noteId: sourceId
+      });
+    }
+  }
+};
 
 export default compose(
   DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
