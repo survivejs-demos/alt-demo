@@ -6,23 +6,24 @@ import connect from '../libs/connect';
 import Lanes from './Lanes';
 import LaneActions from '../actions/LaneActions';
 
-@DragDropContext(HTML5Backend)
-@connect(({lanes}) => ({lanes}), {
-  laneActions: LaneActions
-})
-export default class App extends React.Component {
-  render() {
-    return (
-      <div>
-        <button className="add-lane" onClick={this.addLane}>+</button>
-        <Lanes lanes={this.props.lanes} />
-      </div>
-    );
-  }
-  addLane = () => {
-    this.props.laneActions.create({
+const App = ({LaneActions, lanes}) => {
+  const addLane = () => {
+    LaneActions.create({
       id: uuid.v4(),
       name: 'New lane'
     });
-  }
+  };
+
+  return (
+    <div>
+      <button className="add-lane" onClick={addLane}>+</button>
+      <Lanes lanes={lanes} />
+    </div>
+  );
 }
+
+export default DragDropContext(HTML5Backend)(
+  connect(({LaneStore}) => ({lanes: LaneStore.lanes}), {
+    LaneActions
+  })(App)
+)
