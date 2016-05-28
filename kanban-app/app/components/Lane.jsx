@@ -27,13 +27,6 @@ const Lane = ({
   connectDropTarget, lane, notes, LaneActions, NoteActions, ...props
 }) => {
   const editNote = (id, task) => {
-    // Don't modify if trying to set an empty value
-    if(!task.trim()) {
-      NoteActions.update({id, editing: false});
-
-      return;
-    }
-
     NoteActions.update({id, task, editing: false});
   }
   const addNote = e => {
@@ -63,16 +56,6 @@ const Lane = ({
     NoteActions.delete(noteId);
   }
   const editName = name => {
-    // Don't modify if trying to set an empty value
-    if(!name.trim()) {
-      LaneActions.update({
-        id: lane.id,
-        editing: false
-      });
-
-      return;
-    }
-
     LaneActions.update({
       id: lane.id,
       name,
