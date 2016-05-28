@@ -133,7 +133,9 @@ export default compose(
   DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
     connectDropTarget: connect.dropTarget()
   })),
-  connect(({NoteStore}) => ({notes: NoteStore.notes}), {
+  connect(({NoteStore}) => ({
+    notes: NoteStore.notes
+  }), {
     NoteActions,
     LaneActions
   })
