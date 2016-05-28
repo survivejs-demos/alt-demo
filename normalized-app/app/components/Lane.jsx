@@ -113,7 +113,7 @@ const noteTarget = {
 };
 
 export default compose(
-  DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
+  DropTarget(ItemTypes.NOTE, noteTarget, connect => ({
     connectDropTarget: connect.dropTarget()
   })),
   connect(({notes}) => ({notes}), {
