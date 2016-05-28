@@ -29,7 +29,8 @@ class Edit extends React.Component {
       }
       autoFocus={true}
       defaultValue={value}
-      onKeyPress={this.checkEnter} />;
+      onKeyPress={this.checkEnter}
+      {...props} />;
   }
   checkEnter = (e) => {
     if(e.key === 'Enter') {
