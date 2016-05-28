@@ -1,15 +1,12 @@
 import React from 'react';
 
-export default ({editing, value, onEdit, onValueClick}) => {
+export default ({editing, value, onEdit}) => {
   if(editing) {
     return <Edit value={value} onEdit={onEdit} />;
   }
 
-  return <Value value={value} onValueClick={onValueClick} />;
+  return <span className="value">{value}</span>;
 }
-
-const Value = ({onValueClick = () => {}, value}) =>
-  <span className="value" onClick={onValueClick}>{value}</span>
 
 class Edit extends React.Component {
   render() {
