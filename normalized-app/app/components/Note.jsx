@@ -5,7 +5,7 @@ import ItemTypes from '../constants/itemTypes';
 
 const Note = ({
   connectDragSource, connectDropTarget, isDragging,
-  isOver, onMove, id, editing, ...props
+  isOver, onMove, id, editing, children, ...props
 }) => {
   // Pass through if we are editing
   const dragSource = editing ? a => a : connectDragSource;
@@ -13,7 +13,7 @@ const Note = ({
   return dragSource(connectDropTarget(
     <div style={{
       opacity: isDragging || isOver ? 0 : 1
-    }} {...props}>{props.children}</div>
+    }} {...props}>{children}</div>
   ));
 };
 
