@@ -20,6 +20,9 @@ export default class App extends React.Component {
     );
   }
   addLane = () => {
-    this.props.laneActions.create({id: uuid.v4(), name: 'New lane'});
+    this.props.laneActions.create({
+      id: uuid.v4(),
+      name: 'New lane'
+    });
   }
 }
