@@ -10,7 +10,7 @@ export default ({editing, value, onEdit, className, ...props}) => {
       {...props} />;
   }
 
-  return <span className={classnames('value', className)}>
+  return <span className={classnames('value', className)} {...props}>
     {value}
   </span>;
 }
