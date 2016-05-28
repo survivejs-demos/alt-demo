@@ -1,5 +1,6 @@
 import React from 'react';
 import uuid from 'uuid';
+import {compose} from 'redux';
 import {DropTarget} from 'react-dnd';
 import connect from '../libs/connect';
 import NoteActions from '../actions/NoteActions';
@@ -22,109 +23,97 @@ const noteTarget = {
   }
 };
 
-@DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
-  connectDropTarget: connect.dropTarget()
-}))
-@connect(({notes}) => ({notes}), {
-  NoteActions,
-  LaneActions
-})
-export default class Lane extends React.Component {
-  render() {
-    const {
-      connectDropTarget, lane, notes, LaneActions, NoteActions, ...props
-    } = this.props;
-
-    return connectDropTarget(
-      <div {...props}>
-        <div className="lane-header" onClick={this.activateLaneEdit}>
-          <div className="lane-add-note">
-            <button onClick={this.addNote}>+</button>
-          </div>
-          <Editable className="lane-name" editing={lane.editing}
-            value={lane.name} onEdit={this.editName} />
-          <div className="lane-delete">
-            <button onClick={this.deleteLane}>x</button>
-          </div>
-        </div>
-        <Notes
-          notes={getNotesByIds(notes, lane.notes)}
-          onValueClick={this.activateNoteEdit}
-          onEdit={this.editNote}
-          onDelete={this.deleteNote} />
-      </div>
-    );
-  }
-  editNote = (id, task) => {
-    const {noteActions} = this.props;
-
+const Lane = ({
+  connectDropTarget, lane, notes, LaneActions, NoteActions, ...props
+}) => {
+  const editNote = (id, task) => {
     // Don't modify if trying to set an empty value
     if(!task.trim()) {
-      noteActions.update({id, editing: false});
+      NoteActions.update({id, editing: false});
 
       return;
     }
 
-    noteActions.update({id, task, editing: false});
+    NoteActions.update({id, task, editing: false});
   }
-  addNote = (e) => {
+  const addNote = e => {
     // If note is added, avoid opening lane name edit by stopping
     // event bubbling in this case.
     e.stopPropagation();
 
-    const {LaneActions, NoteActions} = this.props;
     const noteId = uuid.v4();
-    const laneId = this.props.lane.id;
 
     NoteActions.create({
       id: noteId,
       task: 'New task'
     });
-    LaneActions.attachToLane({laneId, noteId});
+    LaneActions.attachToLane({
+      laneId: lane.id,
+      noteId
+    });
   }
-  deleteNote = (noteId, e) => {
+  const deleteNote = (noteId, e) => {
     // Avoid bubbling to edit
     e.stopPropagation();
 
-    const {LaneActions, NoteActions} = this.props;
-    const laneId = this.props.lane.id;
-
-    LaneActions.detachFromLane({laneId, noteId});
+    LaneActions.detachFromLane({
+      laneId: lane.id,
+      noteId
+    });
     NoteActions.delete(noteId);
   }
-  editName = (name) => {
-    const {LaneActions} = this.props;
-    const laneId = this.props.lane.id;
-
+  const editName = name => {
     // Don't modify if trying to set an empty value
     if(!name.trim()) {
-      LaneActions.update({id: laneId, editing: false});
+      LaneActions.update({
+        id: lane.id,
+        editing: false
+      });
 
       return;
     }
 
-    LaneActions.update({id: laneId, name, editing: false});
+    LaneActions.update({
+      id: lane.id,
+      name,
+      editing: false
+    });
   }
-  deleteLane = (e) => {
+  const deleteLane = e => {
     // Avoid bubbling to edit
     e.stopPropagation();
 
-    const {LaneActions} = this.props;
-    const laneId = this.props.lane.id;
-
-    LaneActions.delete(laneId);
+    LaneActions.delete(lane.id);
   }
-  activateLaneEdit = () => {
-    const {LaneActions} = this.props;
-    const laneId = this.props.lane.id;
-
-    LaneActions.update({id: laneId, editing: true});
+  const activateLaneEdit = () => {
+    LaneActions.update({
+      id: lane.id,
+      editing: true
+    });
   }
-  activateNoteEdit = (id) => {
-    const {NoteActions} = this.props;
-
+  const activateNoteEdit = id => {
     NoteActions.update({id, editing: true});
   }
+
+  return connectDropTarget(
+    <div {...props}>
+      <div className="lane-header" onClick={activateLaneEdit}>
+        <div className="lane-add-note">
+          <button onClick={addNote}>+</button>
+        </div>
+        <Editable className="lane-name" editing={lane.editing}
+          value={lane.name} onEdit={editName} />
+        <div className="lane-delete">
+          <button onClick={deleteLane}>x</button>
+        </div>
+      </div>
+      <Notes
+        notes={getNotesByIds(notes, lane.notes)}
+        onValueClick={activateNoteEdit}
+        onEdit={editNote}
+        onDelete={deleteNote} />
+    </div>
+  );
 }
 
 function getNotesByIds(allNotes, ids) {
@@ -139,3 +128,13 @@ function getNotesByIds(allNotes, ids) {
     )
   , []);
 }
+
+export default compose(
+  DropTarget(ItemTypes.NOTE, noteTarget, (connect) => ({
+    connectDropTarget: connect.dropTarget()
+  })),
+  connect(({notes}) => ({notes}), {
+    NoteActions,
+    LaneActions
+  })
+)(Lane)
