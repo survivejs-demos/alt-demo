@@ -1,5 +1,4 @@
 import React from 'react';
-import AltContainer from 'alt-container';
 import alt from './alt';
 
 export default (state, actions) => {
