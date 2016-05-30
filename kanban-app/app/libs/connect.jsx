@@ -1,5 +1,4 @@
 import React from 'react';
-import alt from './alt';
 
 export default (state, actions) => {
   if(typeof state === 'function' ||
