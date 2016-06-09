@@ -15,29 +15,16 @@ export default ({editing, value, onEdit, className, ...props}) => {
   </span>;
 }
 
-class Edit extends React.Component {
-  render() {
-    const {className, value, ...props} = this.props;
+const Edit = ({className, value, onEdit = () => {}, ...props}) => {
+  const checkEnter = e => e.key === 'Enter' && finishEdit(e);
+  const finishEdit = e => onEdit(e.target.value);
 
-    return <input
-      type="text"
-      className={classnames('edit', className)}
-      autoFocus={true}
-      defaultValue={value}
-      onBlur={this.finishEdit}
-      onKeyPress={this.checkEnter}
-      {...props} />;
-  }
-  checkEnter = (e) => {
-    if(e.key === 'Enter') {
-      this.finishEdit(e);
-    }
-  }
-  finishEdit = (e) => {
-    const value = e.target.value;
-
-    if(this.props.onEdit) {
-      this.props.onEdit(value);
-    }
-  }
+  return <input
+    type="text"
+    className={classnames('edit', className)}
+    autoFocus={true}
+    defaultValue={value}
+    onBlur={finishEdit}
+    onKeyPress={checkEnter}
+    {...props} />;
 }
