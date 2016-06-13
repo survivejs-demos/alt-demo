@@ -1,13 +1,12 @@
 import React from 'react';
 
 export default (state, actions) => {
-  if(typeof state === 'function' ||
-    (typeof state === 'object' && Object.keys(state).length)) {
+  if(typeof state === 'function') {
     return target => connect(state, actions, target);
   }
 
   return target => props => (
-    <target {...Object.assign({}, props, actions)} />
+    <target {...{...props, ...actions}} />
   );
 }
 
@@ -33,9 +32,7 @@ function connect(state = () => {}, actions = {}, target) {
       const composedStores = composeStores(stores);
 
       return React.createElement(target,
-        {...Object.assign(
-          {}, this.props, state(composedStores), actions
-        )}
+        {...this.props, ...state(composedStores), ...actions}
       );
     }
     handleChange = () => {
@@ -57,7 +54,7 @@ function composeStores(stores) {
     const store = stores[k];
 
     // Combine store state
-    ret = Object.assign({}, ret, store.getState());
+    ret = {...ret, ...store.getState()};
   });
 
   return ret;
