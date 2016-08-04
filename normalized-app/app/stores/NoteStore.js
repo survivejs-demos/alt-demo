@@ -14,7 +14,7 @@ export default class NoteStore {
 
         const note = notes[k];
 
-        this.notes[note.id] = Object.assign({}, note);
+        this.notes[note.id] = {...note}; // clone
       });
     });
 
@@ -26,23 +26,27 @@ export default class NoteStore {
   }
   create({id, task, editing}) {
     this.setState({
-      notes: Object.assign({}, this.notes, {
+      notes: {
+        ...this.notes,
         [id]: {
           id,
           editing,
           task
         }
-      })
+      }
     });
   }
   update(updatedNote) {
     const id = updatedNote.id;
 
-    this.setState({notes: Object.assign({}, this.notes, {
-        [id]: Object.assign(
-          {}, this.notes[id], updatedNote
-        )
-      })
+    this.setState({
+      notes: {
+        ...this.notes,
+        [id]: {
+          ...this.notes[id],
+          ...updatedNote
+        }
+      }
     });
   }
   delete(id) {

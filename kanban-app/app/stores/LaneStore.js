@@ -20,7 +20,7 @@ export default class LaneStore {
     this.setState({
       lanes: this.lanes.map(lane => {
         if(lane.id === updatedLane.id) {
-          return Object.assign({}, lane, updatedLane);
+          return {...lane, ...updatedLane};
         }
 
         return lane;

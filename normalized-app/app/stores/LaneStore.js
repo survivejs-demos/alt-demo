@@ -15,7 +15,7 @@ export default class LaneStore {
 
         const lane = lanes[k];
 
-        this.lanes[lane.id] = Object.assign({}, lane);
+        this.lanes[lane.id] = {...lane}; // clone
       });
     });
 
@@ -27,24 +27,28 @@ export default class LaneStore {
   }
   create({id, notes, editing, name}) {
     this.setState({
-      lanes: Object.assign({}, this.lanes, {
+      lanes: {
+        ...this.lanes,
         [id]: {
           id,
           editing,
           name,
           notes: notes || []
         }
-      })
+      }
     });
   }
   update(updatedLane) {
     const id = updatedLane.id;
 
-    this.setState({lanes: Object.assign({}, this.lanes, {
-        [id]: Object.assign(
-          {}, this.lanes[id], updatedLane
-        )
-      })
+    this.setState({
+      lanes: {
+        ...this.lanes,
+        [id]: {
+          ...this.lanes[id],
+          ...updatedLane
+        }
+      }
     });
   }
   delete(id) {
@@ -61,22 +65,26 @@ export default class LaneStore {
     if(laneContainingNote) {
       // Remove possible old reference
       removeNote = {
-        [laneContainingNote.id]: Object.assign({}, laneContainingNote, {
+        [laneContainingNote.id]: {
+          ...laneContainingNote,
           notes: laneContainingNote.notes.filter(note => note !== noteId)
-        })
+        }
       };
     }
 
     this.setState({
-      lanes: Object.assign({}, lanes, removeNote, {
+      lanes: {
+        ...lanes,
+        ...removeNote,
         // Add a new reference
-        [laneId]: Object.assign({}, lane, {
+        [laneId]: {
+          ...lane,
           notes: lane.notes.includes(noteId) ?
             lane.notes :
             lane.notes.concat(noteId)
-        })
-      })
-    })
+        }
+      }
+    });
   }
   detachFromLane({laneId, noteId}) {
     const lanes = this.lanes;
@@ -87,11 +95,13 @@ export default class LaneStore {
     }
 
     this.setState({
-      lanes: Object.assign({}, lanes, {
-        [laneId]: Object.assign({}, lane, {
+      lanes: {
+        ...lanes,
+        [laneId]: {
+          ...lane,
           notes: lane.notes.filter(note => note !== noteId)
-        })
-      })
+        }
+      }
     });
   }
   move({sourceId, targetId}) {

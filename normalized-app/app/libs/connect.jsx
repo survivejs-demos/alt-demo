@@ -54,7 +54,10 @@ function composeStores(stores) {
     const store = stores[k];
 
     // Combine store state
-    ret = {...ret, ...store.getState()};
+    ret = {
+      ...ret,
+      [k]: store.getState()
+    };
   });
 
   return ret;

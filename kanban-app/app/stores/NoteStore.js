@@ -13,7 +13,7 @@ export default class NoteStore {
     this.setState({
       notes: this.notes.map(note => {
         if(note.id === updatedNote.id) {
-          return Object.assign({}, note, updatedNote);
+          return {...note, ...updatedNote};
         }
 
         return note;
